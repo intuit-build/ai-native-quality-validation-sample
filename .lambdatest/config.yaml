@@ -10,3 +10,6 @@ environment_id: 270266
 
 # Test URL for automation
 # test_url: "https://demo.lambdatestinternal.com"
+allowed_triggers:
+  - onPullRequestOpened
+  - onComment
