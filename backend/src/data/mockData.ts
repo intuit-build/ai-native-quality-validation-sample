@@ -1658,6 +1658,37 @@ export const mockReviews = [
   },
 ];
 
+// Mock Shares Data (tracks listing share events)
+export const mockShares: Array<{
+  _id: string;
+  listingId: string;
+  userId: string | null;
+  platform: 'copy_link' | 'email' | 'facebook' | 'twitter' | 'whatsapp';
+  createdAt: Date;
+}> = [
+  {
+    _id: '907f1f77bcf86cd799439041',
+    listingId: '607f1f77bcf86cd799439011',
+    userId: '507f1f77bcf86cd799439012',
+    platform: 'copy_link',
+    createdAt: new Date('2024-09-15'),
+  },
+  {
+    _id: '907f1f77bcf86cd799439042',
+    listingId: '607f1f77bcf86cd799439011',
+    userId: null,
+    platform: 'twitter',
+    createdAt: new Date('2024-09-20'),
+  },
+  {
+    _id: '907f1f77bcf86cd799439043',
+    listingId: '607f1f77bcf86cd799439012',
+    userId: '507f1f77bcf86cd799439011',
+    platform: 'email',
+    createdAt: new Date('2024-10-01'),
+  },
+];
+
 // Helper function to find items
 export const findById = (array: any[], id: string) => {
   return array.find(item => item._id === id);

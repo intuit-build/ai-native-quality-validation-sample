@@ -1,12 +1,16 @@
 # LambdaTest Configuration
 
 # Project and folder configuration
-project_id: "01J5B52EZ2S4BNSB7WZMAP3BBE"
-folder_id: "01J5B52EZKT9KRZZT9Z1RHFQS0"
+project_id: "01KS5W8F42SKE9CZDFMW7AWT47"
+folder_id: "01KS63SPDKKP5M5ASG37KQ9773"
 
 # Test Run configuration
 assignee: 41319
 environment_id: 270266
+# Trigger workflow - 2026-05-21
 
 # Test URL for automation
-# test_url: "https://demo.lambdatestinternal.com"
+test_url: "https://demo.lambdatestinternal.com/"
+allowed_triggers:
+  - onPullRequestOpened
+  - onComment

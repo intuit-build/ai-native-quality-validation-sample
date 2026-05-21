@@ -13,11 +13,14 @@ import {
   FaParking,
   FaTv,
   FaSnowflake,
+  FaShareAlt,
 } from 'react-icons/fa';
 import { listingService } from '../services/listingService';
 import { bookingService } from '../services/bookingService';
+import { shareService } from '../services/shareService';
 import { useAuthStore } from '../store/authStore';
 import { differenceInDays } from 'date-fns';
+import ShareModal from '../components/ShareModal';
 
 const amenityIcons: Record<string, any> = {
   WiFi: FaWifi,
@@ -35,10 +38,17 @@ const ListingDetail = () => {
   const [checkIn, setCheckIn] = useState<Date | null>(null);
   const [checkOut, setCheckOut] = useState<Date | null>(null);
   const [guests, setGuests] = useState(1);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ['listing', id],
     queryFn: () => listingService.getListingById(id!),
+    enabled: !!id,
+  });
+
+  const { data: shareData } = useQuery({
+    queryKey: ['shares', id],
+    queryFn: () => shareService.getShareCount(id!),
     enabled: !!id,
   });
 
@@ -100,21 +110,31 @@ const ListingDetail = () => {
         <h1 className="text-3xl font-semibold text-gray-900 mb-2">
           {listing.title}
         </h1>
-        <div className="flex items-center space-x-4 text-sm">
-          {listing.rating && (
-            <div className="flex items-center">
-              <FaStar className="text-black mr-1" />
-              <span className="font-semibold">{listing.rating}</span>
-              <span className="text-gray-600 ml-1">
-                ({listing.reviewCount} reviews)
-              </span>
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center space-x-4">
+            {listing.rating && (
+              <div className="flex items-center">
+                <FaStar className="text-black mr-1" />
+                <span className="font-semibold">{listing.rating}</span>
+                <span className="text-gray-600 ml-1">
+                  ({listing.reviewCount} reviews)
+                </span>
+              </div>
+            )}
+            <div className="flex items-center text-gray-600">
+              <FaMapMarkerAlt className="mr-1" />
+              {listing.location.city}, {listing.location.state},{' '}
+              {listing.location.country}
             </div>
-          )}
-          <div className="flex items-center text-gray-600">
-            <FaMapMarkerAlt className="mr-1" />
-            {listing.location.city}, {listing.location.state},{' '}
-            {listing.location.country}
           </div>
+          <button
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 underline font-medium"
+            data-testid="share-listing-btn"
+          >
+            <FaShareAlt />
+            <span>Share{shareData?.totalShares ? ` (${shareData.totalShares})` : ''}</span>
+          </button>
         </div>
       </div>
 
@@ -321,6 +341,12 @@ const ListingDetail = () => {
           </div>
         </div>
       </div>
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        listingId={id!}
+        listingTitle={listing.title}
+      />
     </div>
   );
 };
